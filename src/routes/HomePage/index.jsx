@@ -49,8 +49,8 @@ const HomePage = () => {
                     <h6 className="text-[24px] font-semibold">Категории</h6>
                     <div className="overflow-x-auto px-4 snap-x snap-mandatory">
                         <div className="flex gap-6">
-                            {categories.map((category, index) => (
-                                <div key={index} className="flex flex-col items-center gap-[18px] max-w-[100px]">
+                            {categories.map(category => (
+                                <div key={category.id} className="flex flex-col items-center gap-[18px] max-w-[100px]">
                                     <div className="relative w-[100px] h-[100px] rounded-full overflow-hidden">
                                         <img
                                             className="object-cover w-full h-full"

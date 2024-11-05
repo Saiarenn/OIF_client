@@ -54,6 +54,10 @@ const privateRoutes = [
                 element: <CategoryPage/>,
             },
             {
+                path: 'category/:path',
+                element: <CategoryPage/>,
+            },
+            {
                 path: '*',
                 element: <div>Not found</div>,
             }
