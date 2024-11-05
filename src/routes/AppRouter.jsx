@@ -8,6 +8,7 @@ import MobileLayout from "../layouts/MobileLayout.jsx";
 import MobileLayoutNav from "../layouts/MobileLayoutNav.jsx";
 import HomePage from "./HomePage/index.jsx";
 import {observer} from "mobx-react-lite";
+import {CategoryPage} from "./CategoryPage/index.jsx";
 
 
 const publicRoutes = [
@@ -47,6 +48,10 @@ const privateRoutes = [
             {
                 path: '/',
                 element: <HomePage/>,
+            },
+            {
+                path: '/category',
+                element: <CategoryPage/>,
             },
             {
                 path: '*',
