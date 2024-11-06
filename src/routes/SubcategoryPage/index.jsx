@@ -43,8 +43,10 @@ export const SubcategoryPage = () => {
 
             <div className="flex flex-col gap-6 px-8 py-6">
                 {categories.map(category =>
-                    <div key={category.id} className="flex items-center gap-4 cursor-pointer">
-                        <img className="w-[90px] h-[90px] object-cover rounded-lg" src={category.image.url} alt={category.path}/>
+                    <div key={category.id} className="flex items-center gap-4 cursor-pointer"
+                         onClick={() => navigate(`/category/${category.path}/products`)}>
+                        <img className="w-[90px] h-[90px] object-cover rounded-lg" src={category.image.url}
+                             alt={category.path}/>
                         <span>{capitalize(category.path.split(".").pop().split("_").join(" "))}</span>
                     </div>
                 )}

@@ -10,6 +10,7 @@ import HomePage from "./HomePage/index.jsx";
 import {observer} from "mobx-react-lite";
 import {CategoryPage} from "./CategoryPage/index.jsx";
 import {SubcategoryPage} from "./SubcategoryPage/index.jsx";
+import {CategoryProducts} from "./CategoryProducts/index.jsx";
 
 
 const publicRoutes = [
@@ -57,6 +58,10 @@ const privateRoutes = [
             {
                 path: '/category/:path',
                 element: <SubcategoryPage/>,
+            },
+            {
+                path: '/category/:path/products',
+                element: <CategoryProducts/>,
             },
             {
                 path: '*',
