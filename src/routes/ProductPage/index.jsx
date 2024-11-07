@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 import {
     fetchProductById,
@@ -10,26 +10,19 @@ import {Pagination} from "swiper/modules";
 
 import 'swiper/css';
 import 'swiper/css/pagination';
+import {message} from "antd";
 
 export const ProductPage = () => {
     const navigate = useNavigate();
     const {id} = useParams();
     const [product, setProduct] = useState({});
     const [variances, setVariances] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    const [modalOpen, setModalOpen] = useState(false);
-    const [selectedType, setSelectedType] = useState(null);
-    const [selectedImage, setSelectedImage] = useState();
     const [selectedVariance, setSelectedVariance] = useState(0);
-    const [selectedSize, setSelectedSize] = useState("XS");
-
-    const handleImageClick = (image) => {
-        setSelectedImage(image);
-    };
 
     const handleSelectVariance = (index) => {
         setSelectedVariance(index);
-        setSelectedImage(variances[index]?.images[0].url);
     };
 
     const images = [
@@ -38,27 +31,72 @@ export const ProductPage = () => {
             id: 2,
             url: "https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
         },
-        {id: 3, url: "https://fastly.picsum.photos/id/512/200/300.jpg?hmac=la5xkVbvHxjdyuCGyQl9H0Hhom_c8BN-5heSmUIPUzE"}
+        {
+            id: 3,
+            url: "https://fastly.picsum.photos/id/512/200/300.jpg?hmac=la5xkVbvHxjdyuCGyQl9H0Hhom_c8BN-5heSmUIPUzE"
+        },
+        {id: 4, url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
+        {
+            id: 5,
+            url: "https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
+        },
     ];
 
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            await fetchProductVariances(id).then(data => {
+                setVariances([]);
+                data.map(variances =>
+                    fetchPathVarianceById(variances.pathVarianceId).then(pathVariance => setVariances(prev => [...prev, {
+                        ...variances,
+                        name: pathVariance.name,
+                        color: pathVariance.color
+                    }]))
+                )
+            });
+            await fetchProductById(id).then(data => setProduct(data));
+        } catch (e) {
+            message.error(e);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
-        fetchProductVariances(id).then(data => {
-            setVariances([]);
-            setSelectedImage(data[selectedVariance]?.images[0].url);
-            data.map(variances =>
-                fetchPathVarianceById(variances.pathVarianceId).then(pathVariance => setVariances(prev => [...prev, {
-                    ...variances,
-                    name: pathVariance.name,
-                    color: pathVariance.color
-                }]))
-            )
-        })
-        fetchProductById(id).then(data => setProduct(data))
+        fetchData();
     }, [id])
 
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleExpanded = () => setIsExpanded(!isExpanded);
+
+    const [multipleAttributes, setMultipleAttributes] = useState([]);
+    const [otherAttributes, setOtherAttributes] = useState([]);
+    const [selectedValues, setSelectedValues] = useState({});
+
+    const handleSelectValue = (propId, value) => {
+        setSelectedValues((prev) => ({
+            ...prev,
+            [propId]: prev[propId] === value ? null : value,
+        }));
+    };
+
+    useEffect(() => {
+        if (variances[selectedVariance]?.attributes) {
+            const newMultipleAttributes = variances[selectedVariance].attributes.filter(
+                (attr) => attr.attribute.type === "MULTIPLE"
+            );
+            const newOtherAttributes = variances[selectedVariance].attributes.filter(
+                (attr) => attr.attribute.type !== "MULTIPLE"
+            );
+
+            setMultipleAttributes(newMultipleAttributes);
+            setOtherAttributes(newOtherAttributes);
+        }
+    }, [variances, selectedVariance]);
+
+    if (loading) return <div>Loading...</div>
 
     return (
         <div className="text-[#0E0D35] bg-[#EBECEE]">
@@ -157,7 +195,7 @@ export const ProductPage = () => {
                         {variances.map((v, index) => (
                             <SwiperSlide key={v.id} className="!w-[108px]">
                                 <img
-                                    className={`rounded-[5px] w-[108px] h-[170px] cursor-pointer
+                                    className={`rounded-[5px] w-[108px] h-[170px] cursor-pointer object-cover object-center
                         ${index === selectedVariance ? "border-[1px] border-[#5755FF]" : ""}`}
                                     onClick={() => handleSelectVariance(index)}
                                     src={v.images[0].url}
@@ -170,15 +208,35 @@ export const ProductPage = () => {
 
             </div>
 
+            {multipleAttributes?.map((prop) => (
+                <div key={prop.id} className="bg-white mt-[6px] px-6 py-4 flex flex-col gap-[14px]">
+                    <div className="text-[19px]">
+                        {prop.attribute.name}
+                    </div>
+
+                    <div className="flex gap-4">
+                        {JSON.parse(prop.value).sort().map((value) => (
+                            <div
+                                key={value}
+                                onClick={() => handleSelectValue(prop.id, value)}
+                                className={`w-8 h-8 p-[6px] flex items-center justify-center border-[1px] rounded cursor-pointer ${
+                                    selectedValues[prop.id] === value ? "border-[#5755FF]" : "border-[#00000080]"
+                                }`}
+                            >
+                                {value}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ))}
+
             <div className="bg-white mt-[6px] px-6 py-4">
                 <div className="text-[19px]">
                     Описание
                 </div>
 
                 <div className={`mt-[14px] ${isExpanded ? "" : "line-clamp-1"}`}>
-                    This approach gives you a clean, collapsible description that initially shows only a few lines with
-                    an ellipsis if the content overflows. The "Show more" link allows users to expand and collapse the
-                    text as needed.
+                    {product.description}
                 </div>
 
                 <div
@@ -195,8 +253,8 @@ export const ProductPage = () => {
                 </div>
 
                 <div className="text-gray-400">
-                    {variances[selectedVariance]?.attributes.map((prop, index) => (
-                        <div key={index} className="flex w-3/4 py-1 gap-2">
+                    {otherAttributes?.map(prop => (
+                        <div key={prop.id} className="flex w-3/4 py-1 gap-2">
                             <div className="flex w-4/5 gap-2">
                                 <span
                                     className="relative text-gray-700 whitespace-nowrap opacity-60">{prop.attribute.name}</span>
