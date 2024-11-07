@@ -27,7 +27,7 @@ export const NavbarMobile = () => {
     ];
 
     return (
-        <nav className={"fixed bottom-0 w-full py-4 px-6 bg-white shadow-[3px_0px_36px_0px_rgba(0,0,0,0.10)]"}>
+        <nav className={"fixed z-50 bottom-0 w-full py-4 px-6 bg-white shadow-[3px_0px_36px_0px_rgba(0,0,0,0.10)]"}>
             <div className={"flex justify-between"}>
                 {navItems.map(item =>
                     <button

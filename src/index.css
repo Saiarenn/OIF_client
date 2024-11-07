@@ -10,3 +10,8 @@ body {
   margin: 0;
   font-family: Montserrat, sans-serif;
 }
+
+.swiper-pagination-bullet-active {
+  width: 16px !important;
+  border-radius: 4px !important;
+}

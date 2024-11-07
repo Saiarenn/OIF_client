@@ -11,6 +11,7 @@ import {observer} from "mobx-react-lite";
 import {CategoryPage} from "./CategoryPage/index.jsx";
 import {SubcategoryPage} from "./SubcategoryPage/index.jsx";
 import {CategoryProducts} from "./CategoryProducts/index.jsx";
+import {ProductPage} from "./ProductPage/index.jsx";
 
 
 const publicRoutes = [
@@ -62,6 +63,10 @@ const privateRoutes = [
             {
                 path: '/category/:path/products',
                 element: <CategoryProducts/>,
+            },
+            {
+                path: '/product/:id',
+                element: <ProductPage/>,
             },
             {
                 path: '*',

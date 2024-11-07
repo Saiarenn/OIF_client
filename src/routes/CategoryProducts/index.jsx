@@ -39,7 +39,7 @@ export const CategoryProducts = () => {
                     </svg>
                 </button>
                 <span className="uppercase w-full text-center">
-                {capitalize(path.split(".").pop().split("_").join(" "))}
+                {path.split(".").pop().split("_").join(" ")}
                 </span>
             </div>
 
