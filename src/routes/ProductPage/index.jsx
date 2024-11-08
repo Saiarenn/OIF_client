@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 import {
-    fetchProductById,
+    fetchProductById, fetchProductForClientById,
     fetchProductVariances,
 } from "../../http/productAPI";
 import {fetchPathVarianceById} from "../../http/pathVariancesAPI";
@@ -55,7 +55,7 @@ export const ProductPage = () => {
                     }]))
                 )
             });
-            await fetchProductById(id).then(data => setProduct(data));
+            await fetchProductForClientById(id).then(data => setProduct(data));
         } catch (e) {
             message.error(e);
         } finally {
@@ -134,8 +134,7 @@ export const ProductPage = () => {
                             "--swiper-pagination-bullet-inactive-opacity": "0.5",
                         }}
                     >
-                        {/*{variances[selectedVariance]?.images?.map(image => (*/}
-                        {images.map(image => (
+                        {variances[selectedVariance]?.images?.map(image => (
                             <SwiperSlide key={image.id}>
                                 <img src={image.url} alt={product.name} className="w-full h-[430px] object-cover"/>
                             </SwiperSlide>

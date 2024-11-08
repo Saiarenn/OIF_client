@@ -54,7 +54,7 @@ const PasswordRegistration = () => {
             <h1 className='text-center text-[28px] font-semibold' style={styles.header}>
                 {isLogin ? "Введите пароль" : "Придумайте пароль"}
             </h1>
-            {isLogin ? <p className='text-center page-subheader'>
+            {isLogin ? <p className='text-center text-[18px]'>
                 Введите пароль от своего аккаунта с <br/> номером
                 <span className="text-[#5755FF]"> {formatPhone(phone)}</span>
             </p> : <p className='text-center text-[18px]'>

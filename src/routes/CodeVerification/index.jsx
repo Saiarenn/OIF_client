@@ -67,12 +67,12 @@ const CodeVerification = () => {
 
     return (
         <>
-            <h1 className='text-center page-header' style={styles.header}>
+            <h1 className='text-center text-[28px] font-semibold' style={styles.header}>
                 {isForget ? "Восстановление пароля" : "Код верификаций"}
             </h1>
-            <p className='text-center page-subheader'>
+            <p className='text-center text-[18px]'>
                 Мы отправили код подтверждения <br /> на номер
-                <span className="blue-text"> {formatPhone(phone)}</span>
+                <span className="text-[#5755FF]"> {formatPhone(phone)}</span>
             </p>
 
             <div style={styles.codeInputContainer}>
@@ -91,13 +91,13 @@ const CodeVerification = () => {
             </div>
 
             <div style={styles.buttonContainer}>
-                <p className='text-center page-subheader' style={styles.optionText}>
+                <p className='text-center text-[18px]' style={styles.optionText}>
                     Не получили код?
                     {isResendDisabled ? (
-                        <span className="text"> Отправить код: 0:{timer < 10 ? `0${timer}` : timer}
+                        <span className="text-[#626C7A]"> Отправить код: 0:{timer < 10 ? `0${timer}` : timer}
                     </span>
                     ) : (
-                        <span onClick={resendCode} className="blue-text"> Переотправить</span>
+                        <span onClick={resendCode} className="text-[#5755FF]"> Переотправить</span>
                     )}
                 </p>
 

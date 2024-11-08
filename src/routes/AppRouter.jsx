@@ -12,6 +12,7 @@ import {CategoryPage} from "./CategoryPage/index.jsx";
 import {SubcategoryPage} from "./SubcategoryPage/index.jsx";
 import {CategoryProducts} from "./CategoryProducts/index.jsx";
 import {ProductPage} from "./ProductPage/index.jsx";
+import {CartPage} from "./CartPage/index.jsx";
 
 
 const publicRoutes = [
@@ -67,6 +68,10 @@ const privateRoutes = [
             {
                 path: '/product/:id',
                 element: <ProductPage/>,
+            },
+            {
+                path: '/cart',
+                element: <CartPage/>,
             },
             {
                 path: '*',

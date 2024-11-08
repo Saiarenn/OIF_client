@@ -5,8 +5,10 @@ import ProductItem from "../../components/ProductItem/index.jsx";
 import {message} from "antd";
 import {fetchNextCategoryPaths} from "../../http/categoryPathAPI.js";
 import {capitalize} from "../../utils/capitalize.js";
+import {useNavigate} from "react-router-dom";
 
 const HomePage = () => {
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -15,7 +17,7 @@ const HomePage = () => {
         setLoading(true);
         try {
             await fetchAllModeratedProducts().then(data => setProducts(data));
-            await fetchNextCategoryPaths("женская_одежда").then(data => setCategories(data));
+            await fetchNextCategoryPaths().then(data => setCategories(data));
         } catch (e) {
             message.error(e)
         } finally {
@@ -50,7 +52,8 @@ const HomePage = () => {
                     <div className="overflow-x-auto px-4 snap-x snap-mandatory">
                         <div className="flex gap-6">
                             {categories.map(category => (
-                                <div key={category.id} className="flex flex-col items-center gap-[18px] max-w-[100px]">
+                                <div key={category.id} className="flex flex-col items-center gap-[18px] max-w-[100px] cursor-pointer"
+                                onClick={() => navigate(`/category/${category.path}`)}>
                                     <div className="relative w-[100px] h-[100px] rounded-full overflow-hidden">
                                         <img
                                             className="object-cover w-full h-full"

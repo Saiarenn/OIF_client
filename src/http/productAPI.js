@@ -73,3 +73,8 @@ export const fetchProductModerationRequests = async (productId) => {
     const { data } = await $authHost.get(`/api/v1/product/admin/moderation/requests/${productId}`)
     return data
 }
+
+export const fetchProductForClientById = async (id) => {
+    const { data } = await $host.get(`/api/v1/product/client/${id}`)
+    return data
+}
