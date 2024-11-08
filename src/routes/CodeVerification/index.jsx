@@ -137,7 +137,7 @@ const styles = {
         fontWeight: "500",
         textAlign: 'center',
         borderRadius: '12px',
-        border: '1px solid var(--light-gray)',
+        border: '1px solid #DDDEDF',
         margin: '0 8px'
     },
     optionText: {

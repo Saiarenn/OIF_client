@@ -1,14 +1,11 @@
 import React from 'react';
+import {useNavigate} from "react-router-dom";
 
-const ProductItem = ({
-                         product = {
-                             image: "https://fastly.picsum.photos/id/1079/200/300.jpg?hmac=2_Q-8QGaabS7GsZLCCM2JvTkNhZFjwv5K2wVnJ8CjKI",
-                             name: "Комплект постельного белья",
-                             price: "20000"
-                         }
-                     }) => {
+const ProductItem = ({product}) => {
+    const navigate = useNavigate();
+
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col cursor-pointer" onClick={() => navigate(`/product/${product.id}`)}>
             <div className="relative">
                 <div className="absolute top-[10px] right-3 flex flex-col gap-2">
 

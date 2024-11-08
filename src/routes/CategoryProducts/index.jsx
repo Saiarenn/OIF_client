@@ -4,18 +4,19 @@ import {useNavigate, useParams} from "react-router-dom";
 import {capitalize} from "../../utils/capitalize.js";
 import {fetchNextCategoryPaths} from "../../http/categoryPathAPI.js";
 import {message} from "antd";
+import {fetchProductsForClientByPath} from "../../http/productAPI.js";
 
 export const CategoryProducts = () => {
     const {path} = useParams();
 
     const navigate = useNavigate();
-    const [categories, setCategories] = useState([]);
+    const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const fetchData = async () => {
         setLoading(true);
         try {
-            await fetchNextCategoryPaths(path).then(data => setCategories(data));
+            await fetchProductsForClientByPath(path).then(data => setProducts(data));
         } catch (e) {
             message.error(e)
         } finally {
@@ -60,8 +61,8 @@ export const CategoryProducts = () => {
 
 
             <div className="grid grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] gap-y-6 gap-x-4 py-8 px-6">
-                {Array.from({length: 10}).map((_, index) =>
-                    <ProductItem key={index}/>
+                {products.map(product =>
+                    <ProductItem key={product.id} product={product}/>
                 )}
             </div>
         </>

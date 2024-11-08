@@ -78,3 +78,8 @@ export const fetchProductForClientById = async (id) => {
     const { data } = await $host.get(`/api/v1/product/client/${id}`)
     return data
 }
+
+export const fetchProductsForClientByPath = async (path ) => {
+    const { data } = await $host.get(`/api/v1/product/client`, {params: {path}})
+    return data
+}

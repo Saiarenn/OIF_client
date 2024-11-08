@@ -33,11 +33,11 @@ export const CartPage = () => {
         //     price: 2000
         // },
     ]);
-    const [contentHeight, setContentHeight] = useState(window.innerHeight - 203);
+    const [contentHeight, setContentHeight] = useState(window.innerHeight);
 
     useEffect(() => {
         const updateContentHeight = () => {
-            const fixedHeight = cart.length ? 58 + 132.5 : 58 + 88; // Navbar + Action section
+            const fixedHeight = cart.length ? 115 + 133 : 115 + 88;
             setContentHeight(window.innerHeight - fixedHeight);
         };
 
@@ -57,7 +57,7 @@ export const CartPage = () => {
     }
 
     return (
-        <div className={`h-[${contentHeight}px]`}>
+        <div style={cart.length ? {} : {height: contentHeight + "px"}}>
             <div className="bg-white px-6 py-4 flex border-b-[1px] border-[#EBECEE]">
                 <span className="uppercase w-full text-center">
                     корзина
@@ -120,7 +120,7 @@ export const CartPage = () => {
                     </div>
                 </div>
             }
-            <div style={{height: "133px"}}></div>
+            <div style={{height: cart.length ? "133px" : "88px"}}></div>
 
             <div className="bg-white fixed p-4 w-full bottom-[58px] rounded-t-xl shadow-[3px_0px_36px_0px_rgba(0,0,0,0.10)]">
                 {cart.length ?

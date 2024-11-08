@@ -81,9 +81,9 @@ const HomePage = () => {
                 <div className="flex flex-col gap-[40px]">
                     <h6 className="text-[24px] font-semibold">Новинки 🔥</h6>
                     <div className="grid grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] gap-4">
-                        {Array.from({length: 6}).map((_, index) =>
-                            <ProductItem key={index}/>
-                        )}
+                        {/*{Array.from({length: 6}).map((_, index) =>*/}
+                        {/*    <ProductItem key={index}/>*/}
+                        {/*)}*/}
                     </div>
                 </div>
             </div>
