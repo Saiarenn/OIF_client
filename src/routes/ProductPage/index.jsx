@@ -121,7 +121,7 @@ export const ProductPage = () => {
             </div>
 
             <div className="bg-white flex justify-center">
-                <div className="relative w-full h-[430px]">
+                <div className="relative w-full h-[350px]">
                     <Swiper
                         modules={[Pagination]}
                         pagination={{clickable: true,}}
@@ -136,41 +136,41 @@ export const ProductPage = () => {
                     >
                         {variances[selectedVariance]?.images?.map(image => (
                             <SwiperSlide key={image.id}>
-                                <img src={image.url} alt={product.name} className="w-full h-[430px] object-cover"/>
+                                <img src={image.url} alt={product.name} className="w-full h-[350px] object-cover object-center"/>
                             </SwiperSlide>
                         ))}
                     </Swiper>
                 </div>
             </div>
 
-            <div className="bg-white flex justify-around items-center px-6 py-4">
-                <div className="flex flex-col gap-2 items-center cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
-                        <path
-                            d="M9.46173 18.9109L9.77127 18.5182L9.46173 18.9109ZM12.5 5.50063L12.1398 5.84737C12.234 5.9453 12.3641 6.00063 12.5 6.00063C12.6359 6.00063 12.766 5.9453 12.8602 5.84737L12.5 5.50063ZM15.5383 18.9109L15.8478 19.3035L15.5383 18.9109ZM9.77127 18.5182C8.27045 17.3351 6.58543 16.148 5.25136 14.6458C3.93443 13.1629 3 11.4125 3 9.1371H2C2 11.7246 3.07528 13.7014 4.50365 15.3098C5.91487 16.8989 7.71071 18.1672 9.15219 19.3035L9.77127 18.5182ZM3 9.1371C3 6.8927 4.26859 4.99759 6.02043 4.19682C7.74074 3.41046 10.0178 3.64273 12.1398 5.84737L12.8602 5.1539C10.4824 2.68336 7.75942 2.3024 5.6047 3.28733C3.48149 4.25786 2 6.51856 2 9.1371H3ZM9.15219 19.3035C9.66673 19.7092 10.2032 20.1286 10.743 20.4441C11.2826 20.7594 11.8731 21 12.5 21V20C12.1269 20 11.7174 19.8553 11.2475 19.5807C10.7777 19.3062 10.295 18.9311 9.77127 18.5182L9.15219 19.3035ZM15.8478 19.3035C17.2893 18.1672 19.0851 16.8989 20.4964 15.3098C21.9247 13.7014 23 11.7246 23 9.1371H22C22 11.4125 21.0656 13.1629 19.7486 14.6458C18.4146 16.148 16.7295 17.3351 15.2287 18.5182L15.8478 19.3035ZM23 9.1371C23 6.51856 21.5185 4.25786 19.3953 3.28733C17.2406 2.3024 14.5176 2.68336 12.1398 5.1539L12.8602 5.84737C14.9822 3.64273 17.2593 3.41046 18.9796 4.19682C20.7314 4.99759 22 6.8927 22 9.1371H23ZM15.2287 18.5182C14.705 18.9311 14.2223 19.3062 13.7525 19.5807C13.2826 19.8553 12.8731 20 12.5 20V21C13.1269 21 13.7174 20.7594 14.257 20.4441C14.7968 20.1286 15.3333 19.7092 15.8478 19.3035L15.2287 18.5182Z"
-                            fill="#0E0D35"/>
-                    </svg>
-                    <div className="text-sm uppercase">Сохранить</div>
-                </div>
+            {/*<div className="bg-white flex justify-around items-center px-6 py-4">*/}
+            {/*    <div className="flex flex-col gap-2 items-center cursor-pointer">*/}
+            {/*        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">*/}
+            {/*            <path*/}
+            {/*                d="M9.46173 18.9109L9.77127 18.5182L9.46173 18.9109ZM12.5 5.50063L12.1398 5.84737C12.234 5.9453 12.3641 6.00063 12.5 6.00063C12.6359 6.00063 12.766 5.9453 12.8602 5.84737L12.5 5.50063ZM15.5383 18.9109L15.8478 19.3035L15.5383 18.9109ZM9.77127 18.5182C8.27045 17.3351 6.58543 16.148 5.25136 14.6458C3.93443 13.1629 3 11.4125 3 9.1371H2C2 11.7246 3.07528 13.7014 4.50365 15.3098C5.91487 16.8989 7.71071 18.1672 9.15219 19.3035L9.77127 18.5182ZM3 9.1371C3 6.8927 4.26859 4.99759 6.02043 4.19682C7.74074 3.41046 10.0178 3.64273 12.1398 5.84737L12.8602 5.1539C10.4824 2.68336 7.75942 2.3024 5.6047 3.28733C3.48149 4.25786 2 6.51856 2 9.1371H3ZM9.15219 19.3035C9.66673 19.7092 10.2032 20.1286 10.743 20.4441C11.2826 20.7594 11.8731 21 12.5 21V20C12.1269 20 11.7174 19.8553 11.2475 19.5807C10.7777 19.3062 10.295 18.9311 9.77127 18.5182L9.15219 19.3035ZM15.8478 19.3035C17.2893 18.1672 19.0851 16.8989 20.4964 15.3098C21.9247 13.7014 23 11.7246 23 9.1371H22C22 11.4125 21.0656 13.1629 19.7486 14.6458C18.4146 16.148 16.7295 17.3351 15.2287 18.5182L15.8478 19.3035ZM23 9.1371C23 6.51856 21.5185 4.25786 19.3953 3.28733C17.2406 2.3024 14.5176 2.68336 12.1398 5.1539L12.8602 5.84737C14.9822 3.64273 17.2593 3.41046 18.9796 4.19682C20.7314 4.99759 22 6.8927 22 9.1371H23ZM15.2287 18.5182C14.705 18.9311 14.2223 19.3062 13.7525 19.5807C13.2826 19.8553 12.8731 20 12.5 20V21C13.1269 21 13.7174 20.7594 14.257 20.4441C14.7968 20.1286 15.3333 19.7092 15.8478 19.3035L15.2287 18.5182Z"*/}
+            {/*                fill="#0E0D35"/>*/}
+            {/*        </svg>*/}
+            {/*        <div className="text-sm uppercase">Сохранить</div>*/}
+            {/*    </div>*/}
 
-                <div className="flex flex-col gap-2 items-center cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M8.66639 7.21429C8.66639 5.43908 10.1588 4 11.9997 4C13.8407 4 15.3331 5.43908 15.3331 7.21429C15.3331 8.46241 14.5953 9.54439 13.5174 10.0769C12.7393 10.4612 11.9997 11.1321 11.9997 12M11.9997 12L20.7003 18.0904C21.1008 18.3707 20.9024 19 20.4135 19H3.5859C3.09705 19 2.89869 18.3707 3.29917 18.0904L11.9997 12Z"
-                            stroke="#9F9EAE" strokeLinecap="round"/>
-                    </svg>
-                    <div className="text-sm uppercase text-[#9F9EAE]">Купить образ</div>
-                </div>
+            {/*    <div className="flex flex-col gap-2 items-center cursor-pointer">*/}
+            {/*        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">*/}
+            {/*            <path*/}
+            {/*                d="M8.66639 7.21429C8.66639 5.43908 10.1588 4 11.9997 4C13.8407 4 15.3331 5.43908 15.3331 7.21429C15.3331 8.46241 14.5953 9.54439 13.5174 10.0769C12.7393 10.4612 11.9997 11.1321 11.9997 12M11.9997 12L20.7003 18.0904C21.1008 18.3707 20.9024 19 20.4135 19H3.5859C3.09705 19 2.89869 18.3707 3.29917 18.0904L11.9997 12Z"*/}
+            {/*                stroke="#9F9EAE" strokeLinecap="round"/>*/}
+            {/*        </svg>*/}
+            {/*        <div className="text-sm uppercase text-[#9F9EAE]">Купить образ</div>*/}
+            {/*    </div>*/}
 
-                <div className="flex flex-col gap-2 items-center cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
-                        <path
-                            d="M7.5 17.9383V6.06179C7.5 4.40244 9.40418 3.46482 10.7194 4.47654L18.4392 10.4148C19.4799 11.2154 19.4799 12.7847 18.4392 13.5853L10.7194 19.5236C9.40418 20.5353 7.5 19.5977 7.5 17.9383Z"
-                            stroke="#0E0D35" strokeLinecap="round"/>
-                    </svg>
-                    <div className="text-sm uppercase">видео</div>
-                </div>
-            </div>
+            {/*    <div className="flex flex-col gap-2 items-center cursor-pointer">*/}
+            {/*        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">*/}
+            {/*            <path*/}
+            {/*                d="M7.5 17.9383V6.06179C7.5 4.40244 9.40418 3.46482 10.7194 4.47654L18.4392 10.4148C19.4799 11.2154 19.4799 12.7847 18.4392 13.5853L10.7194 19.5236C9.40418 20.5353 7.5 19.5977 7.5 17.9383Z"*/}
+            {/*                stroke="#0E0D35" strokeLinecap="round"/>*/}
+            {/*        </svg>*/}
+            {/*        <div className="text-sm uppercase">видео</div>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
 
             <div className="bg-white flex justify-between items-center border-[1px] border-[#EBECEE] px-6 py-4">
                 <div className="text-[#6949FF] text-[23px] font-semibold">
@@ -192,9 +192,9 @@ export const ProductPage = () => {
                         className="flex items-center"
                     >
                         {variances.map((v, index) => (
-                            <SwiperSlide key={v.id} className="!w-[108px]">
+                            <SwiperSlide key={v.id} className="!w-[53px]">
                                 <img
-                                    className={`rounded-[5px] w-[108px] h-[170px] cursor-pointer object-cover object-center
+                                    className={`rounded-[5px] w-[53px] h-[84px] cursor-pointer object-cover object-center
                         ${index === selectedVariance ? "border-[1px] border-[#5755FF]" : ""}`}
                                     onClick={() => handleSelectVariance(index)}
                                     src={v.images[0].url}

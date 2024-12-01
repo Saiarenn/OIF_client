@@ -1,34 +1,29 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
-import {Context} from "../../main.jsx";
-import {login, registration} from "../../http/userAPI.js";
+import {forgotPassword, login, registration} from "../../http/userAPI.js";
 import {formatPhone} from "../../utils/formatPhone.js";
 import AppButton from "../../components/AppButton/index.jsx";
 import AppInput from "../../components/AppInput/index.jsx";
 import {message} from "antd";
+import UserStore from "../../store/UserStore.js";
 
 const PasswordRegistration = () => {
-    const {userStore} = useContext(Context);
-
     const location = useLocation();
     const isLogin = location.pathname === "/login";
     const navigate = useNavigate();
-    const {phone, isForget} = location.state || "";
+    const {phone, isForget, code} = location.state || "";
 
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    // const clickForget = async () => {
-    //     await requestResetPassword(phone).then(() => {
-    //         navigate(FORGET_PASSWORD_ROUTE,  {state: {phone}})
-    //     })
-    // }
+    const clickForget = async () => {
+        navigate("/forget-password", {state: {phone}})
+    }
 
     const submitPassword = async () => {
         if (isLogin) {
             try {
                 await login(phone, password).then(() => {
-                    userStore.setIsAuth(true);
                     navigate("/");
                 })
             } catch (e) {
@@ -37,9 +32,14 @@ const PasswordRegistration = () => {
         } else {
             if (password === confirmPassword) {
                 try {
-                    await registration(phone, password).then(() => {
-                        navigate("/code-verification", {state: {phone}});
-                    })
+                    if (isForget)
+                        await forgotPassword(password, code).then(() => {
+                            navigate("/login", {state: {phone}})
+                        })
+                    else
+                        await registration(phone, password).then(() => {
+                            navigate("/code-verification", {state: {phone}});
+                        })
                 } catch (e) {
                     message.error(e.response.data.errors[0]);
                 }
@@ -79,7 +79,7 @@ const PasswordRegistration = () => {
 
             <div style={styles.buttonContainer}>
                 {isLogin && <p className='text-center text-[18px]' style={styles.optionText}>
-                    Забыли пароль? <span
+                    Забыли пароль? <span onClick={clickForget}
                     className="text-[#5755FF] cursor-pointer">Восстановить</span>
                 </p>}
                 <AppButton onClick={submitPassword}>{isLogin ? "Подтвердить" : "Завершить регистрацию"}</AppButton>

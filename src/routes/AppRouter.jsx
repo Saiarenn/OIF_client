@@ -1,6 +1,5 @@
-import React, {useContext, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {useRoutes} from "react-router-dom";
-import {Context} from "../main.jsx";
 import PhoneNumberScreen from "./PhoneNumberScreen/index.jsx";
 import CodeVerification from "./CodeVerification/index.jsx";
 import PasswordRegistration from "./PasswordRegistration/index.jsx";
@@ -13,6 +12,10 @@ import {SubcategoryPage} from "./SubcategoryPage/index.jsx";
 import {CategoryProducts} from "./CategoryProducts/index.jsx";
 import {ProductPage} from "./ProductPage/index.jsx";
 import {CartPage} from "./CartPage/index.jsx";
+import {OrdersPage} from "./OrdersPage/index.jsx";
+import {OrderPage} from "./OrderPage/index.jsx";
+import {PaymentPage} from "./PaymentPage/index.jsx";
+import {PaymentSuccess} from "./PaymentSuccess/index.jsx";
 
 
 const publicRoutes = [
@@ -74,6 +77,22 @@ const privateRoutes = [
                 element: <CartPage/>,
             },
             {
+                path: '/orders',
+                element: <OrdersPage/>,
+            },
+            {
+                path: '/orders/:id',
+                element: <OrderPage/>,
+            },
+            {
+                path: '/orders/:id/payment',
+                element: <PaymentPage/>,
+            },
+            {
+                path: '/orders/:id/payment/success',
+                element: <PaymentSuccess/>,
+            },
+            {
                 path: '*',
                 element: <div>Not found</div>,
             }
@@ -83,11 +102,9 @@ const privateRoutes = [
 
 
 const AppRouter = observer(() => {
-    const {userStore} = useContext(Context);
-
     const routeList = useMemo(() => {
-        return userStore.isAuth ? privateRoutes : publicRoutes
-    }, [userStore.isAuth])
+        return localStorage.getItem("token") ? privateRoutes : publicRoutes
+    }, [localStorage.getItem("token")])
 
     const context = useRoutes(routeList)
 

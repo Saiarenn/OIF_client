@@ -15,6 +15,19 @@ const authInterceptor = config => {
 
 $authHost.interceptors.request.use(authInterceptor);
 
+$authHost.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    async (error) => {
+        if (error.response.status === 401) {
+            localStorage.removeItem("token");
+        }
+
+        return Promise.reject(error);
+    }
+);
+
 export {
     $host,
     $authHost

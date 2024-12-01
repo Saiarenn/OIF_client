@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import AppButton from "../../components/AppButton";
 import {useLocation, useNavigate} from "react-router-dom";
-import {sendCode, verify} from "../../http/userAPI";
+import {sendCode, sendForgotCode, verify, verifyForgot} from "../../http/userAPI";
 import {formatPhone} from "../../utils/formatPhone";
 
 const CodeVerification = () => {
@@ -30,7 +30,10 @@ const CodeVerification = () => {
     }, [isResendDisabled, timer]);
 
     useEffect(() => {
-        sendCode(phone)
+        if (isForget)
+            sendForgotCode(phone);
+        else
+            sendCode(phone)
     }, [phone])
 
     const handleChange = (e, index) => {
@@ -53,16 +56,27 @@ const CodeVerification = () => {
     };
 
     const handleSubmit = async () => {
-        await verify(phone, code.join("")).then(() => {
-            navigate('/registration/business',  { state: { phone, isForget } })
-        })
+        if (isForget)
+            await verifyForgot(phone, code.join("")).then(code => {
+                navigate('/registration/password', {state: {phone, isForget, code}})
+            })
+        else
+            await verify(phone, code.join("")).then(() => {
+                navigate('/registration/business', {state: {phone}})
+            })
     };
 
     const resendCode = async () => {
-        await sendCode(phone).then(() => {
-            setTimer(59);
-            setIsResendDisabled(true);
-        })
+        if (isForget)
+            await sendForgotCode(phone).then(() => {
+                setTimer(59);
+                setIsResendDisabled(true);
+            })
+        else
+            await sendCode(phone).then(() => {
+                setTimer(59);
+                setIsResendDisabled(true);
+            })
     }
 
     return (

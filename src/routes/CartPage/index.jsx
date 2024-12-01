@@ -4,34 +4,34 @@ import {useNavigate} from "react-router-dom";
 export const CartPage = () => {
     const navigate = useNavigate();
     const [cart, setCart] = useState([
-        // {
-        //     id: 1,
-        //     images: {url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
-        //     amount: 1,
-        //     name: "Название товара",
-        //     price: 2000
-        // },
-        // {
-        //     id: 2,
-        //     images: {url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
-        //     amount: 1,
-        //     name: "Название товара",
-        //     price: 2000
-        // },
-        // {
-        //     id: 3,
-        //     images: {url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
-        //     amount: 1,
-        //     name: "Название товара",
-        //     price: 2000
-        // },
-        // {
-        //     id: 4,
-        //     images: {url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
-        //     amount: 1,
-        //     name: "Название товара",
-        //     price: 2000
-        // },
+        {
+            id: 1,
+            images: {url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
+            amount: 1,
+            name: "Название товара",
+            price: 2000
+        },
+        {
+            id: 2,
+            images: {url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
+            amount: 1,
+            name: "Название товара",
+            price: 2000
+        },
+        {
+            id: 3,
+            images: {url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
+            amount: 1,
+            name: "Название товара",
+            price: 2000
+        },
+        {
+            id: 4,
+            images: {url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
+            amount: 1,
+            name: "Название товара",
+            price: 2000
+        },
     ]);
     const [contentHeight, setContentHeight] = useState(window.innerHeight);
 
@@ -135,7 +135,7 @@ export const CartPage = () => {
                     <></>
                 }
                 <button className="p-4 bg-[#5755FF] text-white w-full rounded-2xl"
-                        onClick={() => navigate("/")}>
+                        onClick={() => navigate(cart.length ? "/orders" : "/")}>
                     {cart.length ? "Купить" : "За покупками"}
                 </button>
             </div>

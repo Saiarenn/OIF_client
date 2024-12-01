@@ -31,3 +31,22 @@ export const checkPhone = async (number) => {
     const { data } = await $host.get('/api/v1/auth/check', {params: {number: number}})
     return data;
 }
+
+export const forgotPassword = async (password, code) => {
+    const { data } = await $host.post('/api/v1/auth/forgot-password', {password, code})
+    return data;
+}
+
+export const sendForgotCode = async (phoneNumber) => {
+    const { data } = await $host.post('/api/v1/auth/send-forgot-password-code', {}, {
+        params: {
+            phoneNumber: phoneNumber
+        }
+    });
+    return data;
+};
+
+export const verifyForgot = async (login, code) => {
+    const { data } = await $host.post('/api/v1/auth/verify-forgot-password-code', {login, code})
+    return data;
+}
