@@ -1,38 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {fetchAllCartProducts} from "../../http/cartAPI.js";
+import {capitalize} from "../../utils/capitalize.js";
 
 export const CartPage = () => {
     const navigate = useNavigate();
-    const [cart, setCart] = useState([
-        {
-            id: 1,
-            images: {url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
-            amount: 1,
-            name: "Название товара",
-            price: 2000
-        },
-        {
-            id: 2,
-            images: {url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
-            amount: 1,
-            name: "Название товара",
-            price: 2000
-        },
-        {
-            id: 3,
-            images: {url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
-            amount: 1,
-            name: "Название товара",
-            price: 2000
-        },
-        {
-            id: 4,
-            images: {url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
-            amount: 1,
-            name: "Название товара",
-            price: 2000
-        },
-    ]);
+    const [cart, setCart] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [contentHeight, setContentHeight] = useState(window.innerHeight);
 
     useEffect(() => {
@@ -56,6 +30,13 @@ export const CartPage = () => {
             item.id !== id ? item : {...item, amount: item.amount + 1}))
     }
 
+    useEffect(() => {
+        setLoading(true)
+        fetchAllCartProducts().then(data => setCart(data)).finally(() => setLoading(false))
+    }, [])
+
+    if (loading) return <div>Loading...</div>
+
     return (
         <div style={cart.length ? {} : {height: contentHeight + "px"}}>
             <div className="bg-white px-6 py-4 flex border-b-[1px] border-[#EBECEE]">
@@ -75,37 +56,59 @@ export const CartPage = () => {
             {cart.length ?
                 <div className="bg-[#EBECEE]">
                     {cart.map(item =>
-                        <div key={item.id} className="flex gap-4 mt-[6px] bg-white p-6">
-                            <img className="w-[80px] h-[100px]" src={item.images.url} alt={item.name}/>
+                        <div className="flex flex-col gap-[14px] mt-[6px] bg-white p-6">
+                            <div className="flex gap-[14px]">
+                                <input type="checkbox"/>
 
-                            <div className="flex flex-col gap-2">
-                                <div className="text-[#5755FF] font-semibold">{item.price} ₸</div>
-                                <div className="">{item.name}</div>
+                                <div className="w-full text-[#5755FF] font-bold text-xl">
+                                    <div>{item.productName}</div>
+                                </div>
 
-                                <div className="flex items-center gap-2">
-                                    <button className="border-[1px] border-[#EBECEE] rounded h-full px-4 py-2"
-                                            onClick={() => removeProduct(item.id)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="15"
-                                             viewBox="0 0 13 15" fill="none">
-                                            <path
-                                                d="M10.8451 8.0197L11.3404 8.08862L10.8451 8.0197ZM10.6702 9.27639L11.1655 9.34531L10.6702 9.27639ZM2.33042 9.27639L2.82564 9.20747L2.33042 9.27639ZM2.15553 8.01971L1.6603 8.08863L2.15553 8.01971ZM4.62276 13.9913L4.42836 14.4519H4.42836L4.62276 13.9913ZM2.81705 11.8736L3.28637 11.7012L2.81705 11.8736ZM10.1836 11.8736L10.6529 12.046L10.1836 11.8736ZM8.37789 13.9913L8.1835 13.5306L8.37789 13.9913ZM2.33142 5.45275C2.3053 5.17784 2.06127 4.97616 1.78637 5.00228C1.51146 5.0284 1.30978 5.27243 1.3359 5.54733L2.33142 5.45275ZM11.6648 5.54733C11.6909 5.27243 11.4892 5.0284 11.2143 5.00228C10.9394 4.97616 10.6954 5.17784 10.6692 5.45275L11.6648 5.54733ZM11.8337 4.66671C12.1098 4.66671 12.3337 4.44285 12.3337 4.16671C12.3337 3.89057 12.1098 3.66671 11.8337 3.66671V4.66671ZM1.16699 3.66671C0.89085 3.66671 0.666992 3.89057 0.666992 4.16671C0.666992 4.44285 0.89085 4.66671 1.16699 4.66671V3.66671ZM4.66699 11.5C4.66699 11.7762 4.89085 12 5.16699 12C5.44313 12 5.66699 11.7762 5.66699 11.5H4.66699ZM5.66699 6.16671C5.66699 5.89056 5.44313 5.66671 5.16699 5.66671C4.89085 5.66671 4.66699 5.89056 4.66699 6.16671H5.66699ZM7.33366 11.5C7.33366 11.7762 7.55752 12 7.83366 12C8.1098 12 8.33366 11.7762 8.33366 11.5H7.33366ZM8.33366 6.16671C8.33366 5.89056 8.1098 5.66671 7.83366 5.66671C7.55752 5.66671 7.33366 5.89056 7.33366 6.16671H8.33366ZM9.16699 4.16671V4.66671H9.66699V4.16671H9.16699ZM3.83366 4.16671H3.33366V4.66671H3.83366V4.16671ZM10.3499 7.95078L10.175 9.20747L11.1655 9.34531L11.3404 8.08862L10.3499 7.95078ZM2.82564 9.20747L2.65075 7.95079L1.6603 8.08863L1.83519 9.34531L2.82564 9.20747ZM6.50033 13.6667C5.48088 13.6667 5.11728 13.6573 4.81715 13.5306L4.42836 14.4519C4.95975 14.6762 5.57071 14.6667 6.50033 14.6667V13.6667ZM1.83519 9.34531C2.02166 10.6852 2.12303 11.4345 2.34772 12.046L3.28637 11.7012C3.10803 11.2158 3.01933 10.5992 2.82564 9.20747L1.83519 9.34531ZM4.81715 13.5306C4.20219 13.2711 3.6303 12.6372 3.28637 11.7012L2.34772 12.046C2.75746 13.1612 3.48836 14.0553 4.42836 14.4519L4.81715 13.5306ZM10.175 9.20747C9.98132 10.5992 9.89262 11.2158 9.71428 11.7012L10.6529 12.046C10.8776 11.4345 10.979 10.6852 11.1655 9.34531L10.175 9.20747ZM6.50033 14.6667C7.42994 14.6667 8.0409 14.6762 8.57229 14.4519L8.1835 13.5306C7.88337 13.6573 7.51977 13.6667 6.50033 13.6667V14.6667ZM9.71428 11.7012C9.37035 12.6372 8.79846 13.2711 8.1835 13.5306L8.57229 14.4519C9.51229 14.0553 10.2432 13.1612 10.6529 12.046L9.71428 11.7012ZM2.65075 7.95079C2.50267 6.88673 2.3921 6.09139 2.33142 5.45275L1.3359 5.54733C1.39912 6.21269 1.5134 7.03307 1.6603 8.08863L2.65075 7.95079ZM11.3404 8.08862C11.4873 7.03307 11.6015 6.21268 11.6648 5.54733L10.6692 5.45275C10.6086 6.09139 10.498 6.88672 10.3499 7.95078L11.3404 8.08862ZM11.8337 3.66671H1.16699V4.66671H11.8337V3.66671ZM5.66699 11.5V6.16671H4.66699V11.5H5.66699ZM8.33366 11.5V6.16671H7.33366V11.5H8.33366ZM8.66699 3.50004V4.16671H9.66699V3.50004H8.66699ZM9.16699 3.66671H3.83366V4.66671H9.16699V3.66671ZM4.33366 4.16671V3.50004H3.33366V4.16671H4.33366ZM6.50033 1.33337C7.69694 1.33337 8.66699 2.30342 8.66699 3.50004H9.66699C9.66699 1.75114 8.24923 0.333374 6.50033 0.333374V1.33337ZM6.50033 0.333374C4.75142 0.333374 3.33366 1.75114 3.33366 3.50004H4.33366C4.33366 2.30342 5.30371 1.33337 6.50033 1.33337V0.333374Z"
-                                                fill="#5755FF"/>
-                                        </svg>
-                                    </button>
+                                <svg onClick={() => navigate(`/product/${item.id}`)}
+                                     className="cursor-pointer"
+                                     xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21"
+                                     fill="none">
+                                    <path
+                                        d="M8.74902 5.25L13.3803 9.88128C13.722 10.223 13.722 10.777 13.3803 11.1187L8.74902 15.75"
+                                        stroke="#9F9EAE" strokeWidth="1.3125" strokeLinecap="round"/>
+                                </svg>
+                            </div>
+                            <div key={item.id} className="flex gap-4 ">
+                                <img className="w-[80px] h-[100px]" src={item.image} alt={item.productName}/>
 
-                                    <div
-                                        className="border-[1px] border-[#EBECEE] rounded h-full px-4 py-2 text-sm text-center flex-1 w-[100px]">
-                                        {item.amount} шт
+                                <div className="flex flex-col gap-2">
+                                    <div className="text-[#6E6E86] text-lg font-bold">{item.price} ₸</div>
+                                    <div className="text-[#6E6E86] text-sm">
+                                        {capitalize(item.path.split(".").pop())} Цвет: {item.varianceName}, {item.attributes.map(attr =>
+                                        <span>{attr.name}: {attr.value}</span>
+                                    )}
                                     </div>
 
-                                    <button className="border-[1px] border-[#EBECEE] rounded h-full px-4 py-2"
-                                            onClick={() => addProductAmount(item.id)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                             viewBox="0 0 17 17" fill="none">
-                                            <path d="M8.50033 3.16663V13.8333M13.8337 8.49996L3.16699 8.49996"
-                                                  stroke="#5755FF" strokeLinecap="round"/>
-                                        </svg>
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        <button className="border-[1px] border-[#EBECEE] rounded h-full px-4 py-2"
+                                                onClick={() => removeProduct(item.id)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="15"
+                                                 viewBox="0 0 13 15" fill="none">
+                                                <path
+                                                    d="M10.8451 8.0197L11.3404 8.08862L10.8451 8.0197ZM10.6702 9.27639L11.1655 9.34531L10.6702 9.27639ZM2.33042 9.27639L2.82564 9.20747L2.33042 9.27639ZM2.15553 8.01971L1.6603 8.08863L2.15553 8.01971ZM4.62276 13.9913L4.42836 14.4519H4.42836L4.62276 13.9913ZM2.81705 11.8736L3.28637 11.7012L2.81705 11.8736ZM10.1836 11.8736L10.6529 12.046L10.1836 11.8736ZM8.37789 13.9913L8.1835 13.5306L8.37789 13.9913ZM2.33142 5.45275C2.3053 5.17784 2.06127 4.97616 1.78637 5.00228C1.51146 5.0284 1.30978 5.27243 1.3359 5.54733L2.33142 5.45275ZM11.6648 5.54733C11.6909 5.27243 11.4892 5.0284 11.2143 5.00228C10.9394 4.97616 10.6954 5.17784 10.6692 5.45275L11.6648 5.54733ZM11.8337 4.66671C12.1098 4.66671 12.3337 4.44285 12.3337 4.16671C12.3337 3.89057 12.1098 3.66671 11.8337 3.66671V4.66671ZM1.16699 3.66671C0.89085 3.66671 0.666992 3.89057 0.666992 4.16671C0.666992 4.44285 0.89085 4.66671 1.16699 4.66671V3.66671ZM4.66699 11.5C4.66699 11.7762 4.89085 12 5.16699 12C5.44313 12 5.66699 11.7762 5.66699 11.5H4.66699ZM5.66699 6.16671C5.66699 5.89056 5.44313 5.66671 5.16699 5.66671C4.89085 5.66671 4.66699 5.89056 4.66699 6.16671H5.66699ZM7.33366 11.5C7.33366 11.7762 7.55752 12 7.83366 12C8.1098 12 8.33366 11.7762 8.33366 11.5H7.33366ZM8.33366 6.16671C8.33366 5.89056 8.1098 5.66671 7.83366 5.66671C7.55752 5.66671 7.33366 5.89056 7.33366 6.16671H8.33366ZM9.16699 4.16671V4.66671H9.66699V4.16671H9.16699ZM3.83366 4.16671H3.33366V4.66671H3.83366V4.16671ZM10.3499 7.95078L10.175 9.20747L11.1655 9.34531L11.3404 8.08862L10.3499 7.95078ZM2.82564 9.20747L2.65075 7.95079L1.6603 8.08863L1.83519 9.34531L2.82564 9.20747ZM6.50033 13.6667C5.48088 13.6667 5.11728 13.6573 4.81715 13.5306L4.42836 14.4519C4.95975 14.6762 5.57071 14.6667 6.50033 14.6667V13.6667ZM1.83519 9.34531C2.02166 10.6852 2.12303 11.4345 2.34772 12.046L3.28637 11.7012C3.10803 11.2158 3.01933 10.5992 2.82564 9.20747L1.83519 9.34531ZM4.81715 13.5306C4.20219 13.2711 3.6303 12.6372 3.28637 11.7012L2.34772 12.046C2.75746 13.1612 3.48836 14.0553 4.42836 14.4519L4.81715 13.5306ZM10.175 9.20747C9.98132 10.5992 9.89262 11.2158 9.71428 11.7012L10.6529 12.046C10.8776 11.4345 10.979 10.6852 11.1655 9.34531L10.175 9.20747ZM6.50033 14.6667C7.42994 14.6667 8.0409 14.6762 8.57229 14.4519L8.1835 13.5306C7.88337 13.6573 7.51977 13.6667 6.50033 13.6667V14.6667ZM9.71428 11.7012C9.37035 12.6372 8.79846 13.2711 8.1835 13.5306L8.57229 14.4519C9.51229 14.0553 10.2432 13.1612 10.6529 12.046L9.71428 11.7012ZM2.65075 7.95079C2.50267 6.88673 2.3921 6.09139 2.33142 5.45275L1.3359 5.54733C1.39912 6.21269 1.5134 7.03307 1.6603 8.08863L2.65075 7.95079ZM11.3404 8.08862C11.4873 7.03307 11.6015 6.21268 11.6648 5.54733L10.6692 5.45275C10.6086 6.09139 10.498 6.88672 10.3499 7.95078L11.3404 8.08862ZM11.8337 3.66671H1.16699V4.66671H11.8337V3.66671ZM5.66699 11.5V6.16671H4.66699V11.5H5.66699ZM8.33366 11.5V6.16671H7.33366V11.5H8.33366ZM8.66699 3.50004V4.16671H9.66699V3.50004H8.66699ZM9.16699 3.66671H3.83366V4.66671H9.16699V3.66671ZM4.33366 4.16671V3.50004H3.33366V4.16671H4.33366ZM6.50033 1.33337C7.69694 1.33337 8.66699 2.30342 8.66699 3.50004H9.66699C9.66699 1.75114 8.24923 0.333374 6.50033 0.333374V1.33337ZM6.50033 0.333374C4.75142 0.333374 3.33366 1.75114 3.33366 3.50004H4.33366C4.33366 2.30342 5.30371 1.33337 6.50033 1.33337V0.333374Z"
+                                                    fill="#5755FF"/>
+                                            </svg>
+                                        </button>
+
+                                        <div
+                                            className="border-[1px] border-[#EBECEE] rounded h-full px-4 py-2 text-sm text-center flex-1 w-[100px]">
+                                            {item.amount} шт
+                                        </div>
+
+                                        <button className="border-[1px] border-[#EBECEE] rounded h-full px-4 py-2"
+                                                onClick={() => addProductAmount(item.id)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                 viewBox="0 0 17 17" fill="none">
+                                                <path d="M8.50033 3.16663V13.8333M13.8337 8.49996L3.16699 8.49996"
+                                                      stroke="#5755FF" strokeLinecap="round"/>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -122,7 +125,8 @@ export const CartPage = () => {
             }
             <div style={{height: cart.length ? "133px" : "88px"}}></div>
 
-            <div className="bg-white fixed p-4 w-full bottom-[58px] rounded-t-xl shadow-[3px_0px_36px_0px_rgba(0,0,0,0.10)]">
+            <div
+                className="bg-white fixed p-4 w-full bottom-[58px] rounded-t-xl shadow-[3px_0px_36px_0px_rgba(0,0,0,0.10)]">
                 {cart.length ?
                     <div className="pb-4 flex justify-between items-center">
                         <span className="text-sm">Выбрано: {cart.length} товар</span>

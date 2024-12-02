@@ -20,25 +20,10 @@ export const PaymentSuccess = () => {
     return (
         <div style={{height: contentHeight + "px"}}>
             <div className="bg-white px-6 py-4 flex border-b-[1px] border-[#EBECEE]">
-                <button onClick={() => navigate("/cart")}>
+                <button onClick={() => navigate("/orders ")}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M13.9998 6L8.70696 11.2929C8.31643 11.6834 8.31643 12.3166 8.70696 12.7071L13.9998 18"
                               stroke="#0E0D35" strokeLinecap="round"/>
-                    </svg>
-                </button>
-
-                <span className="uppercase w-full text-center">
-                    Оформление заказа
-                </span>
-
-                <button>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M11.9999 13.43C13.723 13.43 15.1199 12.0331 15.1199 10.31C15.1199 8.58687 13.723 7.19 11.9999 7.19C10.2768 7.19 8.87988 8.58687 8.87988 10.31C8.87988 12.0331 10.2768 13.43 11.9999 13.43Z"
-                            stroke="#0E0D35"/>
-                        <path
-                            d="M3.61971 8.49C5.58971 -0.169998 18.4197 -0.159997 20.3797 8.5C21.5297 13.58 18.3697 17.88 15.5997 20.54C13.5897 22.48 10.4097 22.48 8.38971 20.54C5.62971 17.88 2.46971 13.57 3.61971 8.49Z"
-                            stroke="#0E0D35"/>
                     </svg>
                 </button>
             </div>

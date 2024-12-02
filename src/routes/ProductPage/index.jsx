@@ -1,16 +1,16 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 import {
-    fetchProductById, fetchProductForClientById,
+    fetchProductForClientById,
     fetchProductVariances,
 } from "../../http/productAPI";
 import {fetchPathVarianceById} from "../../http/pathVariancesAPI";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Pagination} from "swiper/modules";
-
 import 'swiper/css';
 import 'swiper/css/pagination';
 import {message} from "antd";
+import {addToCart} from "../../http/cartAPI.js";
 
 export const ProductPage = () => {
     const navigate = useNavigate();
@@ -20,27 +20,11 @@ export const ProductPage = () => {
     const [loading, setLoading] = useState(false);
 
     const [selectedVariance, setSelectedVariance] = useState(0);
+    const [amount, setAmount] = useState(0);
 
     const handleSelectVariance = (index) => {
         setSelectedVariance(index);
     };
-
-    const images = [
-        {id: 1, url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
-        {
-            id: 2,
-            url: "https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
-        },
-        {
-            id: 3,
-            url: "https://fastly.picsum.photos/id/512/200/300.jpg?hmac=la5xkVbvHxjdyuCGyQl9H0Hhom_c8BN-5heSmUIPUzE"
-        },
-        {id: 4, url: "https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"},
-        {
-            id: 5,
-            url: "https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
-        },
-    ];
 
     const fetchData = async () => {
         try {
@@ -93,8 +77,41 @@ export const ProductPage = () => {
 
             setMultipleAttributes(newMultipleAttributes);
             setOtherAttributes(newOtherAttributes);
+
+            setSelectedValues((prev) => {
+                const initialSelectedValues = { ...prev };
+                newMultipleAttributes.forEach((attr) => {
+                    if (!initialSelectedValues[attr.id]) {
+                        const firstValue = JSON.parse(attr.value)?.[0];
+                        if (firstValue) {
+                            initialSelectedValues[attr.id] = firstValue;
+                        }
+                    }
+                });
+                return initialSelectedValues;
+            });
         }
     }, [variances, selectedVariance]);
+
+    const add = async () => {
+        const selectedValueIds = variances[selectedVariance].attributes.map(a => a.id)
+
+        const attributes = Object.entries(selectedValues)
+            .filter(([key]) => selectedValueIds.includes(Number(key)))
+            .map(([key, value]) => ({
+                attributeId: variances[selectedVariance].attributes.find(attr => attr.id === Number(key)).attribute.id,
+                value
+            }));
+
+        await addToCart({
+            productVarianceId: variances[selectedVariance].id,
+            amount,
+            attributes
+        }).then(() => {
+            message.success("Товар добвален в корзину");
+            setAmount(0)
+        })
+    }
 
     if (loading) return <div>Loading...</div>
 
@@ -136,7 +153,8 @@ export const ProductPage = () => {
                     >
                         {variances[selectedVariance]?.images?.map(image => (
                             <SwiperSlide key={image.id}>
-                                <img src={image.url} alt={product.name} className="w-full h-[350px] object-cover object-center"/>
+                                <img src={image.url} alt={product.name}
+                                     className="w-full h-[350px] object-cover object-center"/>
                             </SwiperSlide>
                         ))}
                     </Swiper>
@@ -268,6 +286,46 @@ export const ProductPage = () => {
                 {/*<div className="mt-2 text-[#5B93FF] cursor-pointer">*/}
                 {/*    Показать польностью*/}
                 {/*</div>*/}
+            </div>
+
+            <div
+                className="bg-white p-4 w-full bottom-[58px] rounded-t-xl shadow-[3px_0px_36px_0px_rgba(0,0,0,0.10)]">
+                {amount ?
+                    <>
+                        <div className="pb-4 flex justify-between items-center">
+                            <span className="text-sm">Выбрано: <span className="font-bold">{amount}</span> товар</span>
+                            <span className="text-[19px] text-[#5755FF] font-semibold">
+                                {amount * product.price} ₸
+                            </span>
+                        </div>
+                        <div className="p-4 bg-[#5755FF] text-white w-full rounded-2xl flex justify-between items-center">
+                            <svg onClick={() => setAmount(amount - 1)}
+                                 className={"cursor-pointer"}
+                                 xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
+                                 fill="none">
+                                <path d="M13.3337 8L2.66699 8" stroke="white" strokeLinecap="round"/>
+                            </svg>
+
+                            <span className="select-none cursor-pointer" onClick={add}>{amount}</span>
+
+                            <svg onClick={() => setAmount(amount + 1)}
+                                 className={"cursor-pointer"}
+                                 xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
+                                 fill="none">
+                                <path d="M8.00033 2.66663V13.3333M13.3337 7.99996L2.66699 7.99996" stroke="white"
+                                      strokeLinecap="round"/>
+                            </svg>
+                        </div>
+                    </>
+
+                    :
+                    <>
+                        <button className="p-4 bg-[#5755FF] text-white w-full rounded-2xl"
+                                onClick={() => setAmount(1)}>
+                            В корзину
+                        </button>
+                    </>
+                }
             </div>
         </div>
     );
