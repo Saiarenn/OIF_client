@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {deleteCart, fetchAllCartProducts, updateAmount} from "../../http/cartAPI.js";
+import {deleteCart, fetchAllCartProducts} from "../../http/cartAPI.js";
 import {capitalize} from "../../utils/capitalize.js";
 
 export const CartPage = () => {
@@ -163,10 +163,17 @@ export const CartPage = () => {
                     :
                     <></>
                 }
-                <button className="p-4 bg-[#5755FF] text-white w-full rounded-2xl"
-                        onClick={() => navigate(cart.length ? "/orders" : "/")}>
+                <button
+                    className="p-4 bg-[#5755FF] text-white w-full rounded-2xl"
+                    onClick={() =>
+                        navigate(cart.length ? "/orders/create" : "/", {
+                            state: cart.length ? { products: selectedProducts } : undefined
+                        })
+                    }
+                >
                     {cart.length ? "Купить" : "За покупками"}
                 </button>
+
             </div>
         </div>
     )

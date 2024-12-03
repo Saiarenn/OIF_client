@@ -81,15 +81,15 @@ const privateRoutes = [
                 element: <OrdersPage/>,
             },
             {
-                path: '/orders/:id',
+                path: '/orders/create',
                 element: <OrderPage/>,
             },
             {
-                path: '/orders/:id/payment',
+                path: '/orders/create/payment',
                 element: <PaymentPage/>,
             },
             {
-                path: '/orders/:id/payment/success',
+                path: '/orders/create/payment/success',
                 element: <PaymentSuccess/>,
             },
             {

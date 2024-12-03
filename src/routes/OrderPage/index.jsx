@@ -1,10 +1,34 @@
-import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, {useState} from "react";
+import {useLocation, useNavigate} from "react-router-dom";
 import {Swiper, SwiperSlide} from "swiper/react";
+import {AddressPopup} from "../../components/AddressPopup/index.jsx";
+import {UserInfoPopup} from "../../components/UserInfoPopup/index.jsx";
+import {createOrder} from "../../http/orderAPI.js";
 
 export const OrderPage = () => {
     const navigate = useNavigate();
-    const [order, setOrder] = useState([]);
+    const [addressOpen, setAddressOpen] = useState(false);
+    const [userInfoOpen, setUserInfoOpen] = useState(false);
+    const [selectedAddress, setSelectedAddress] = useState(null);
+
+    const location = useLocation();
+    const { products } = location.state || "";
+
+    console.log(products)
+    const makeOrder = async () => {
+
+        const newProducts = products.map(product => {
+            return {
+                productVarianceId: product.productVarianceId,
+                amount: product.amount,
+                attributes: product.attributes,
+            }
+        })
+        await createOrder({
+            addressId: selectedAddress.id,
+            products: newProducts
+        })
+    }
 
     return (
         <>
@@ -31,8 +55,8 @@ export const OrderPage = () => {
             <div className="flex flex-col">
                 <div className="flex flex-col gap-4 p-6">
                     <div className="flex justify-between text-[19px]">
-                        <span>Товары, <span className="font-bold">10</span> шт.</span>
-                        <span className="text-[#5755FF] font-bold">2000 ₸</span>
+                        <span>Товары, <span className="font-bold">{products.length}</span> шт.</span>
+                        <span className="text-[#5755FF] font-bold">{products.reduce((acc, curr) => acc + (curr.price * curr.amount), 0)} ₸</span>
                     </div>
                     <div className="">
                         <Swiper
@@ -41,12 +65,12 @@ export const OrderPage = () => {
                             freeMode={true}
                             className="flex items-center"
                         >
-                            {Array.from({length: 10}).map((_, index) => (
-                                <SwiperSlide key={index} className="!w-[43px]">
+                            {products.map(product => (
+                                <SwiperSlide key={product.id} className="!w-[43px]">
                                     <img
                                         className={`w-[43px] h-[56px] cursor-pointer object-cover object-center`}
-                                        src={"https://fastly.picsum.photos/id/16/200/300.jpg?hmac=k64O1qCMBhaU0Ep_qML5_xDxqLVR1MhNm8VMqgdAsxA"}
-                                        alt={"v.images[0].url"}
+                                        src={product.image}
+                                        alt={product.productName}
                                     />
                                 </SwiperSlide>
                             ))}
@@ -59,8 +83,9 @@ export const OrderPage = () => {
                         <span>Город</span>
                     </div>
                     <div className="flex justify-between">
-                        <span>Алматы</span>
+                        <span>{selectedAddress ? selectedAddress.city : "Выберите город"}</span>
                         <span className="text-[#5755FF] cursor-pointer"
+                              onClick={() => setAddressOpen(true)}
                         >Изменить</span>
                     </div>
                 </div>
@@ -70,8 +95,9 @@ export const OrderPage = () => {
                         <span>Индекс</span>
                     </div>
                     <div className="flex justify-between">
-                        <span className="font-bold">050000</span>
+                        <span className="font-bold">{selectedAddress ? selectedAddress.postalCode : "Выберите город"}</span>
                         <span className="text-[#5755FF] cursor-pointer"
+                              onClick={() => setAddressOpen(true)}
                         >Изменить</span>
                     </div>
                 </div>
@@ -83,6 +109,7 @@ export const OrderPage = () => {
                     <div className="flex justify-between">
                         <span>Имя Фамилия</span>
                         <span className="text-[#5755FF] cursor-pointer"
+                              onClick={() => setUserInfoOpen(true)}
                         >Изменить</span>
                     </div>
                 </div>
@@ -92,10 +119,13 @@ export const OrderPage = () => {
 
             <div className="bg-white fixed p-4 w-full bottom-[58px] rounded-t-xl shadow-[3px_0px_36px_0px_rgba(0,0,0,0.10)]">
                 <button className="p-4 bg-[#5755FF] text-white w-full rounded-2xl"
-                        onClick={() => navigate("payment")}>
+                        onClick={makeOrder}>
                     Продолжить
                 </button>
             </div>
+
+            {addressOpen && <AddressPopup setSelectedAddress={setSelectedAddress} onClose={() => setAddressOpen(false)}/>}
+            {userInfoOpen && <UserInfoPopup onClose={() => setUserInfoOpen(false)}/>}
         </>
     )
 }
