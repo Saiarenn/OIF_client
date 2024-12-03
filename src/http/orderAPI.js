@@ -5,8 +5,12 @@ export const createOrder = async (order) => {
     return data
 }
 
-export const attachReceipt = async (id, check) => {
-    const { data } = await $authHost.put(`/api/v1/order/client/${id}`, {check})
+export const attachReceipt = async (id, formData) => {
+    const { data } = await $authHost.put(`/api/v1/order/client/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
     return data
 }
 
