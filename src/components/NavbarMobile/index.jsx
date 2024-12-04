@@ -21,7 +21,7 @@ export const NavbarMobile = () => {
             icon: HeartIcon
         },
         {
-            link: "/profile",
+            link: "/personal",
             icon: UserIcon
         },
     ];

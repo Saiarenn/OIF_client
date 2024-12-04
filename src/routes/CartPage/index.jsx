@@ -57,7 +57,7 @@ export const CartPage = () => {
     if (loading) return <div>Loading...</div>
 
     return (
-        <div style={cart.length ? {} : {height: contentHeight + "px"}}>
+        <div style={cart.length ? {} : {height: contentHeight + "px"}} className="bg-[#EBECEE]">
             <div className="bg-white px-6 py-4 flex border-b-[1px] border-[#EBECEE]">
                 <span className="uppercase w-full text-center">
                     корзина
@@ -73,7 +73,7 @@ export const CartPage = () => {
             </div>
 
             {cart.length ?
-                <div className="bg-[#EBECEE]">
+                <div className="">
                     {cart.map(item => {
                         const selectedProduct = getSelected(item.id);
                         return (

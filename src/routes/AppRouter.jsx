@@ -16,6 +16,9 @@ import {OrdersPage} from "./OrdersPage/index.jsx";
 import {OrderPage} from "./OrderPage/index.jsx";
 import {PaymentPage} from "./PaymentPage/index.jsx";
 import {PaymentSuccess} from "./PaymentSuccess/index.jsx";
+import {PersonalPage} from "./PersonalPage/index.jsx";
+import {UserOrders} from "./PersonalPage/UserOrders/index.jsx";
+import {UserDelivery} from "./PersonalPage/UserDelivery/index.jsx";
 
 
 const publicRoutes = [
@@ -91,6 +94,18 @@ const privateRoutes = [
             {
                 path: '/orders/payment/:id/success',
                 element: <PaymentSuccess/>,
+            },
+            {
+                path: '/personal',
+                element: <PersonalPage/>,
+            },
+            {
+                path: '/personal/orders',
+                element: <UserOrders/>,
+            },
+            {
+                path: '/personal/delivery',
+                element: <UserDelivery/>,
             },
             {
                 path: '*',
