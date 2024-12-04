@@ -27,7 +27,7 @@ export const OrderPage = () => {
         await createOrder({
             addressId: selectedAddress.id,
             products: newProducts
-        })
+        }).then(data => navigate(`/orders/payment/${data.id}`))
     }
 
     return (
