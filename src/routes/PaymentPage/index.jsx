@@ -6,6 +6,7 @@ import {useNavigate, useParams} from "react-router-dom";
 export const PaymentPage = () => {
     const [file, setFile] = useState(null);
     const [order, setOrder] = useState(null);
+    const [total, setTotal] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const {id} = useParams();
@@ -19,17 +20,26 @@ export const PaymentPage = () => {
     };
 
     useEffect(() => {
-        fetchOrderById(id).then(data => setOrder(data))
+        fetchOrderById(id).then(data => {
+            setOrder(data);
+            const price = data.products.reduce((acc, curr) => acc + (curr.price * curr.amount), 0);
+            setTotal(price);
+        })
             .finally(() => setLoading(false))
     }, [])
 
     const uploadReceipt = async () => {
-        const formData = new FormData();
-        formData.append("check", file);
-        await attachReceipt(id, formData).then(() => navigate("success"))
+        try {
+            setLoading(true);
+            const formData = new FormData();
+            formData.append("check", file);
+            await attachReceipt(id, formData).then(() => navigate("success"))
+        } catch (e) {
+            message.error(e.message)
+        } finally {
+            setLoading(false);
+        }
     }
-
-    const total = order.products.reduce((acc, curr) => acc + (curr.price * curr.amount), 0);
 
     if (loading) return <div>Loading...</div>
 

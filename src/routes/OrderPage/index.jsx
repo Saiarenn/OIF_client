@@ -4,6 +4,7 @@ import {Swiper, SwiperSlide} from "swiper/react";
 import {AddressPopup} from "../../components/AddressPopup/index.jsx";
 import {UserInfoPopup} from "../../components/UserInfoPopup/index.jsx";
 import {createOrder} from "../../http/orderAPI.js";
+import {deleteCart} from "../../http/cartAPI.js";
 
 export const OrderPage = () => {
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ export const OrderPage = () => {
     const [selectedAddress, setSelectedAddress] = useState(null);
 
     const location = useLocation();
-    const { products } = location.state || "";
+    const {products} = location.state || "";
 
     console.log(products)
     const makeOrder = async () => {
@@ -27,7 +28,12 @@ export const OrderPage = () => {
         await createOrder({
             addressId: selectedAddress.id,
             products: newProducts
-        }).then(data => navigate(`/orders/payment/${data.id}`))
+        }).then(data => {
+            products.map(async product =>
+                await deleteCart(product.id)
+            )
+            navigate(`/orders/payment/${data.id}`)
+        })
     }
 
     return (
@@ -46,8 +52,12 @@ export const OrderPage = () => {
 
                 <button>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M11.9999 13.43C13.723 13.43 15.1199 12.0331 15.1199 10.31C15.1199 8.58687 13.723 7.19 11.9999 7.19C10.2768 7.19 8.87988 8.58687 8.87988 10.31C8.87988 12.0331 10.2768 13.43 11.9999 13.43Z" stroke="#0E0D35"/>
-                        <path d="M3.61971 8.49C5.58971 -0.169998 18.4197 -0.159997 20.3797 8.5C21.5297 13.58 18.3697 17.88 15.5997 20.54C13.5897 22.48 10.4097 22.48 8.38971 20.54C5.62971 17.88 2.46971 13.57 3.61971 8.49Z" stroke="#0E0D35"/>
+                        <path
+                            d="M11.9999 13.43C13.723 13.43 15.1199 12.0331 15.1199 10.31C15.1199 8.58687 13.723 7.19 11.9999 7.19C10.2768 7.19 8.87988 8.58687 8.87988 10.31C8.87988 12.0331 10.2768 13.43 11.9999 13.43Z"
+                            stroke="#0E0D35"/>
+                        <path
+                            d="M3.61971 8.49C5.58971 -0.169998 18.4197 -0.159997 20.3797 8.5C21.5297 13.58 18.3697 17.88 15.5997 20.54C13.5897 22.48 10.4097 22.48 8.38971 20.54C5.62971 17.88 2.46971 13.57 3.61971 8.49Z"
+                            stroke="#0E0D35"/>
                     </svg>
                 </button>
             </div>
@@ -56,7 +66,8 @@ export const OrderPage = () => {
                 <div className="flex flex-col gap-4 p-6">
                     <div className="flex justify-between text-[19px]">
                         <span>Товары, <span className="font-bold">{products.length}</span> шт.</span>
-                        <span className="text-[#5755FF] font-bold">{products.reduce((acc, curr) => acc + (curr.price * curr.amount), 0)} ₸</span>
+                        <span
+                            className="text-[#5755FF] font-bold">{products.reduce((acc, curr) => acc + (curr.price * curr.amount), 0)} ₸</span>
                     </div>
                     <div className="">
                         <Swiper
@@ -95,7 +106,8 @@ export const OrderPage = () => {
                         <span>Индекс</span>
                     </div>
                     <div className="flex justify-between">
-                        <span className="font-bold">{selectedAddress ? selectedAddress.postalCode : "Выберите город"}</span>
+                        <span
+                            className="font-bold">{selectedAddress ? selectedAddress.postalCode : "Выберите город"}</span>
                         <span className="text-[#5755FF] cursor-pointer"
                               onClick={() => setAddressOpen(true)}
                         >Изменить</span>
@@ -117,14 +129,16 @@ export const OrderPage = () => {
 
             <div style={{height: "88px"}}></div>
 
-            <div className="bg-white fixed p-4 w-full bottom-[58px] rounded-t-xl shadow-[3px_0px_36px_0px_rgba(0,0,0,0.10)]">
+            <div
+                className="bg-white fixed p-4 w-full bottom-[58px] rounded-t-xl shadow-[3px_0px_36px_0px_rgba(0,0,0,0.10)]">
                 <button className="p-4 bg-[#5755FF] text-white w-full rounded-2xl"
                         onClick={makeOrder}>
                     Продолжить
                 </button>
             </div>
 
-            {addressOpen && <AddressPopup setSelectedAddress={setSelectedAddress} onClose={() => setAddressOpen(false)}/>}
+            {addressOpen &&
+                <AddressPopup setSelectedAddress={setSelectedAddress} onClose={() => setAddressOpen(false)}/>}
             {userInfoOpen && <UserInfoPopup onClose={() => setUserInfoOpen(false)}/>}
         </>
     )

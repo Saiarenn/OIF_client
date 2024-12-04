@@ -1,6 +1,5 @@
 import {SearchBar} from "../../components/SearchBar/index.jsx";
-import React, {useEffect, useMemo, useState} from "react";
-import {fetchAllModeratedProducts} from "../../http/productAPI.js";
+import React, {useEffect, useState} from "react";
 import {fetchNextCategoryPaths} from "../../http/categoryPathAPI.js";
 import {message} from "antd";
 import {CategoryItem} from "../../components/CategoryItem/index.jsx";
